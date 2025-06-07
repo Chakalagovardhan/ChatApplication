@@ -13,6 +13,7 @@ const ChatRoom = () => {
   const searchParams=new URLSearchParams(location.search);
   const userNameParams=searchParams.get("userName");
   const roomIdParams=searchParams.get("roomId");
+  const[chatboxcolor,setchatboxcolor]= useState("gray-300");
   const [textarea, settextarea] = useState("");
   const chatBotRef = useRef(null);
   const [userName, setUserName] = useState(userNameParams||"");
@@ -95,7 +96,7 @@ const ChatRoom = () => {
       client.onConnect = () => {
         setStompClient(client);
         toast.success("connected");
-  
+        
         client.subscribe(`/topic/room/${roomId}`, (message) => {
           console.log(message);
           const newMessage = JSON.parse(message.body);
@@ -109,26 +110,18 @@ const ChatRoom = () => {
     connectwebsocket();
   }, [roomId]);
   
-
-
-
-
-
-
-
-
-
-
-  
+ 
   return (
-    <div className="h-screen flex flex-col">
-      <div className="bg-gray-700 text-white h-[100px] flex justify-around items-center">
+    <div className="flex flex-col h-full w-full">
+
+      <div className="bg-[#9FB3DF]  h-[50px] border-[#FFF1D5] border rounded-sm flex justify-around items-center">
         <span>{userName}</span>
         <span>RoomId:{roomId}</span>
-        <span className="bg-red-600 p-3 rounded-lg">Leave Room</span>
+        <span className="bg-red-600 p-1 rounded-lg ">Leave Room</span>
       </div>
 
-      <main className="flex-1 overflow-y-auto bg-gray-600 w-full md:w-[70%] mx-auto p-4 rounded-b-md">
+     <main className={`flex-grow overflow-y-auto bg-${chatboxcolor}  w-full mx-auto p-4 `}>
+
         {chats.map((message, index) => (
           <div
             key={index}
@@ -138,7 +131,7 @@ const ChatRoom = () => {
           >
             <div
               className={`flex min-w-12 w-auto max-w-[50%] ${
-                message.sender === userName ? "bg-green-600" : "bg-red-600"
+                message.sender === userName ? "bg-green-400" : "bg-red-400"
               } rounded-2xl`}
             >
               <div className={`flex flex-col p-2 w-full`}>
@@ -158,7 +151,7 @@ const ChatRoom = () => {
       </main>
 
       {/* Bottom Input Bar */}
-      <div className="bg-gray-700 h-[50px] w-full md:w-[70%] mx-auto flex items-center px-4 text-white mb-1 rounded-md">
+      <div className="bg-gray-700 h-[50px] w-full  mx-auto flex items-center px-4 text-white  rounded-b-md">
         <input
           type="text"
           placeholder="Type your message..."
